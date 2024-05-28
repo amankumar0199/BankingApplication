@@ -1,0 +1,25 @@
+server:
+ port : 8081
+ 
+spring:
+  application:
+    name: API-GATEWAY-SERVICE
+  cloud:
+    gateway:
+      routes:
+        - id: AccountManagement
+          uri: http://localhost:8082
+          predicates:
+            - Path=/accounts/**
+            
+        - id: customerManagement
+          uri: http://localhost:8083
+          predicates:
+            - Path=/customers/**
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
