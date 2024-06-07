@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Nagarro.AccountManagement.entities.AccountModel;
-import com.Nagarro.AccountManagement.service.AccountService;
-import com.Nagarro.AccountManagement.exception.InsufficientFundsException;
 import com.Nagarro.AccountManagement.exception.CustomerNotFoundException;
+import com.Nagarro.AccountManagement.exception.InsufficientFundsException;
+import com.Nagarro.AccountManagement.service.AccountService;
 
 
 
@@ -56,7 +57,6 @@ public class Account {
 	 * 4. return amount subtract from total
 	 * 5. update account balance
 	 * 
-	 * in request body we will send account number, withdrawal amount, 
 	 * */
 	@PostMapping("/withdraw")
 	public ResponseEntity<String> withdrawAmount(@RequestParam String accountNumber, @RequestParam double amount ){
@@ -77,16 +77,29 @@ public class Account {
 	
 
 	@DeleteMapping("/removeAccount")
-	public ResponseEntity<String> deleteAccount(@RequestParam String accountNumber){
-		
-		boolean isDeleted = accountService.deleteAccount(accountNumber);
-		if(isDeleted) {
-			return ResponseEntity.status(HttpStatus.SC_OK).body("account removed");
-		}
-		else {
-			return ResponseEntity.status(HttpStatus.SC_NOT_FOUND).body("account not found");
-		}
+	public void DeleteCustomer(@RequestParam Long id) {
+		accountService.deleteAccountbyID(id);
 	}
+
+	
+	@DeleteMapping("/{customerId}")
+	public boolean deleteOnCustomerRemoval(@PathVariable Long customerId){
+		return accountService.removeAccounts(customerId);
+	}
+	
+	
+	
+//	public ResponseEntity<String> deleteAccount(@RequestParam String accountNumber){
+//		
+//		boolean isDeleted = accountService.deleteAccount(accountNumber);
+//		if(isDeleted) {
+//			return ResponseEntity.status(HttpStatus.SC_OK).body("account removed");
+//		}
+//		else {
+//			return ResponseEntity.status(HttpStatus.SC_NOT_FOUND).body("account not found");
+//		}
+//	}
+
 	
 	
 	

@@ -1,13 +1,5 @@
-package com.Nagarro.AccountManagement.entities;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
-@Entity
+package com.Nagarro.customerManagement.entities;
 public class AccountModel {
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long accountId;
 	private String accountNumber;
 	private Long customerId;
@@ -30,16 +22,6 @@ public class AccountModel {
 		this.accountBalance = accountBalance;
 		this.accountStatus = accountStatus;
 		this.branchId = branchId;
-	}
-
-
-	public Long getAccountId() {
-		return accountId;
-	}
-
-
-	public void setAccountId(Long accountId) {
-		this.accountId = accountId;
 	}
 
 
@@ -88,3 +70,5 @@ public class AccountModel {
 	
 
 }
+
+

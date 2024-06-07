@@ -1,5 +1,7 @@
 package com.Nagarro.AccountManagement.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ public class AccountService {
     
     
     public boolean isCustomerExists(Long customerId) {
-        ResponseEntity<customerModel> responseEntity = restTemplate.getForEntity("http://localhost:9090/customers/" + customerId, customerModel.class);
+        ResponseEntity<customerModel> responseEntity = restTemplate.getForEntity("http://localhost:8083/customers/" + customerId, customerModel.class);
         logger.info("", responseEntity);
         return responseEntity.getStatusCode().is2xxSuccessful();
     }
@@ -87,6 +89,22 @@ public class AccountService {
 		else {
 			return false;
 		}
+	}
+
+
+	public void deleteAccountbyID(Long id) {
+		accountRepository.deleteById(id);
+	}
+
+
+	public boolean removeAccounts(Long customerId) {
+		List<AccountModel> accounts = accountRepository.findBycustomerId(customerId);
+		for(AccountModel account : accounts) {
+			Long accountId = account.getAccountId();
+			accountRepository.deleteById(accountId);
+		}
+		return true;
+		
 	}
 
 }

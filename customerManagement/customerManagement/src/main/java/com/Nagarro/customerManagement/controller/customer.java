@@ -1,14 +1,19 @@
 package com.Nagarro.customerManagement.controller;
-import java.util.ArrayList;
-import org.springframework.http.ResponseEntity;
-
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.Nagarro.customerManagement.exception.CustomerNotFoundException;
 import com.Nagarro.customerManagement.entities.customerModel;
 import com.Nagarro.customerManagement.service.customerService;
 
@@ -22,7 +27,7 @@ public class customer{
 	@PostMapping("/add")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<customerModel> addCustomer(@RequestBody customerModel customer) {
-		
+		customerService.addCustomer(customer);
 		return ResponseEntity.status(HttpStatus.CREATED).body(customer);
 		}
 	
@@ -31,12 +36,6 @@ public class customer{
         return customerService.getAllCustomers();
     }
 	
-//	@GetMapping("/{id1}")
-//	@ResponseStatus(HttpStatus.CREATED)
-//	public ResponseEntity add1Customer(@RequestBody customerModel customer) {
-//		
-//		return ResponseEntity.status(HttpStatus.CREATED).body(customer);
-//		}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<customerModel> getCustomer(@PathVariable Long id) {
@@ -48,10 +47,18 @@ public class customer{
         }	
 	}
 	
+
 	@DeleteMapping("/{id}")
-	public void DeleteCustomer(@PathVariable Long id) {
-		customerService.deleteCustomer(id);
+	public ResponseEntity<String> DeleteCustomer(@PathVariable Long id) {
+	
+		try {
+			customerService.deleteCustomer(id);
+			return ResponseEntity.ok("Customer removed");
+		} catch (CustomerNotFoundException e) {
+				return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
+	
 
 	
 	
